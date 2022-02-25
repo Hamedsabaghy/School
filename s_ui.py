@@ -1,18 +1,24 @@
 from tkinter import *
-from tkinter import  messagebox
+from tkinter import messagebox
 import s_bl as bl
-from datetime import date
+
+
+main_id=0
+main_name=0
+role=0
 
 def Add_student():
     global name_student
     global family_student
+    global password_student
 
     addstudent=Tk()
     addstudent.title('Add student')
     addstudent.geometry("425x100")
 
     Label(addstudent, text='Name' ).grid(row=0)
-    Label(addstudent, text='family' ).grid(row=1)
+    Label(addstudent, text='Family' ).grid(row=1)
+    Label(addstudent, text='Password').grid(row=2)
 
     name_student =Entry(addstudent,width=25)
     name_student.grid(row=0, column=1)
@@ -20,38 +26,56 @@ def Add_student():
     family_student =Entry(addstudent,width=25)
     family_student.grid(row=1, column=1)
 
+    password_student = Entry(addstudent, width=25)
+    password_student.grid(row=2, column=1)
+
+
     Add=Button(addstudent, text='Add', width=25,command=adds )
     Add.grid(row=3)
 
 def adds():
     global name_student
     global family_student
-    name=name_student.get()
-    family=family_student.get()
-    s=bl.student(name,family)
-    s.insert()
-    l = bl.student.get(s)
-    txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2]
-    messagebox.showinfo('Add sudent ','Added student :)'+txt)
+    global password_student
 
+    name_S=name_student.get()
+    family_S=family_student.get()
+    password_S=password_student.get()
+
+    check=bl.checkpassword(password_S,10)
+
+    if check==True:
+        s=bl.student(name_S,family_S,password_S)
+        s.insert()
+        l = bl.student.get(s)
+        txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2]
+        messagebox.showinfo('Add student ','Added student :)'+txt)
+    else:
+        messagebox.showerror('Add student ','The number of characters in the password must be 6 and 10 characters')
 #.......................
 
 def Add_teacher():
     global name_teacher
     global family_teacher
+    global password_teacher
     global lbc
+
     addteacher=Tk()
     addteacher.title('Add teacher')
     addteacher.geometry("425x400")
 
     Label(addteacher, text='Name' ).grid(row=0)
-    Label(addteacher, text='family' ).grid(row=1)
+    Label(addteacher, text='Family').grid(row=1)
+    Label(addteacher, text='Password').grid(row=2)
 
     name_teacher =Entry(addteacher,width=25)
     name_teacher.grid(row=0, column=1)
 
     family_teacher =Entry(addteacher,width=25)
     family_teacher.grid(row=1, column=1)
+
+    password_teacher=Entry(addteacher,width=25)
+    password_teacher.grid(row=2, column=1)
 
     Label(addteacher,text="Course:").grid(row=3)
 
@@ -67,18 +91,26 @@ def Add_teacher():
 def addt():
     global name_teacher
     global family_teacher
+    global password_teacher
     global lbc
 
     name=name_teacher.get()
     family=family_teacher.get()
+    password_T=password_teacher.get()
     course = lbc.get(ANCHOR)
-    idc=course[0]
-    s=bl.teacher(name,family,idc)
-    s.insert()
-    l=bl.teacher.get(s)
-    txt='\t'+'id:'+str(l[0])+'  '+'name:'+l[1]+'  '+'family:'+l[2]+'  '+'id course: '+str(l[3])
-    messagebox.showinfo('Add teacher ','Added teacher :)'+txt)
+    idc = course[0]
 
+    check=bl.checkpassword(password_T,10)
+
+    if check==True:
+        s=bl.teacher(name,family,idc,password_T)
+        s.insert()
+        l=bl.teacher.get(s)
+        txt='\t'+'id:'+str(l[0])+'  '+'name:'+l[1]+'  '+'family:'+l[2]+'  '+'id course: '+str(l[3])
+        messagebox.showinfo('Add teacher ','Added teacher :)'+txt)
+
+    else:
+        messagebox.showerror('Add teacher ','The number of characters in the password must be 6 and 10 characters')
 #.......................
 
 def Add_course():
@@ -99,198 +131,119 @@ def Add_course():
 def addc():
     global name_course
 
-    name=name_course.get()
+    name = name_course.get()
 
-    s=bl.course(name)
+    s = bl.course(name)
     s.insert()
     l = bl.course.get(s)
     txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1]
-    messagebox.showinfo('Add course ','Added course :)'+txt)
+    messagebox.showinfo('Add course ', 'Added course :)'+txt)
 
 #.......................
 
 def Unit_selection ():
-    global student_id
-    global next
-    global unitselection
+    global unit_selection,next,lbc_unit_selection,next_button_unit_selection
 
-    unitselection=Tk()
-    unitselection.title('Unit selection')
-    unitselection.geometry("425x400")
+    unit_selection=Tk()
+    unit_selection.title('Unit selection')
+    unit_selection.geometry("425x400")
+    
+    Label(unit_selection, text="Course:").grid(row=1)
 
-    Label(unitselection,text='student id :').grid(row=0)
+    lbc_unit_selection = Listbox(unit_selection)
+    l = bl.course.select()
+    
+    for i in l:
+        lbc_unit_selection.insert(END, i)
 
-    student_id=Entry(unitselection)
-    student_id.grid(row=0,column=1)
+    lbc_unit_selection.grid(row=1,column=1)
 
-    next=Button(unitselection,text='Next',width=25,command=Unit_selection2)
-    next.grid(row=1)
-def Unit_selection2 ():
-    global student_id,next
-    global unitselection,next2,lbc2,ids_student
+    next_button_unit_selection = Button(unit_selection, text='Next', width=25, command=Unit_selection2)
+    next_button_unit_selection.grid(row=2)
 
-    ids_student=int(student_id.get())
-    check=bl.student.check_id(ids_student)
-    if check==True:
-        next.destroy()
 
-        Label(unitselection, text="Course:").grid(row=1)
+def Unit_selection2():
+    global next_button_unit_selection, lbc_unit_selection,unit_selection
+    global next3,lbt_unit_selection,course
 
-        lbc2 = Listbox(unitselection)
-        l = bl.course.select()
-        for i in l:
-            lbc2.insert(END, i)
-        lbc2.grid(row=1,column=1)
+    course = lbc_unit_selection.get(ANCHOR)
+    course=course[0]
+    next_button_unit_selection.destroy()
 
-        next2 = Button(unitselection, text='Next', width=25, command=Unit_selection3)
-        next2.grid(row=2)
+    Label(unit_selection, text="Teacher:").grid(row=2)
 
-    else:
-        messagebox.showerror("Unit selection",'id:'+str(ids_student)+'\t'+'Not found')
-        unitselection.destroy()
-        Unit_selection()
+    lbt_unit_selection = Listbox(unit_selection)
+    l = bl.teacher.select(course)
+
+    for i in l:
+        lbt_unit_selection.insert(END, i)
+
+    lbt_unit_selection.grid(row=2,column=1)
+
+    OK_button = Button(unit_selection, text='OK', width=25, command=Unit_selection3)
+    OK_button.grid(row=3)
 
 def Unit_selection3():
-    global next2, lbc2, ids_student,unitselection
-    global ids_student,next3,lbt,course
+    global OK_button, lbt_unit_selection,course,main_id,unit_selection
 
-    course = lbc2.get(ANCHOR)
-    course=course[0]
-    next2.destroy()
+    Teacher=lbt_unit_selection.get(ANCHOR)
+    Name_teacher_unit_selection="'"+Teacher[0]+"'"
+    Family_teacher_unit_selection="'"+Teacher[1]+"'"
 
-    Label(unitselection, text="Teacher:").grid(row=2)
+    id_teacher_unit_selection=str(bl.teacher.search(None,2,Name_teacher_unit_selection,Family_teacher_unit_selection))
 
-    lbt = Listbox(unitselection)
-    l = bl.teacher.select(course)
-    for i in l:
-        lbt.insert(END, i)
-    lbt.grid(row=2,column=1)
-    OK = Button(unitselection, text='OK', width=25, command=Unit_selection4)
-    OK.grid(row=3)
-
-def Unit_selection4():
-    global ids_student, OK, lbt,course
-
-    teacher=lbt.get(ANCHOR)
-
-    Unit_selection=bl.unit_select(ids_student,course,teacher[0])
+    Unit_selection=bl.unit_select(main_id,course,id_teacher_unit_selection)
     Unit_selection.insert()
-    messagebox.showinfo('Unit selection','Unit selected :)')
-#.....................
-def Add_mark():
-    global add_mark, teacher_id, nextt
 
-    add_mark=Tk()
+    messagebox.showinfo('Unit selection','Unit selected :)')
+    unit_selection.destroy()
+
+#.....................
+
+def Add_mark():
+    global  lbs_add_mark, mark_add_mark, main_id
+
+    add_mark = Tk()
     add_mark.title('Add mark')
     add_mark.geometry("425x400")
-    
-    Label(add_mark,text='Teacher id: ').grid(row=0)
 
-    teacher_id = Entry(add_mark)
-    teacher_id.grid(row=0, column=1)
+    Label(add_mark, text="student:").grid(row=1)
 
-    nextt = Button(add_mark, text='Next', width=25, command=Add_mark2)
-    nextt.grid(row=1)
+    lbs_add_mark = Listbox(add_mark)
+    l = bl.unit_select.select_student(main_id)
+    print(l)
 
-def Add_mark2():
-    global add_mark, teacher_id, nextt, lbs, mark, idt_teacher
+    for i in l:
+        lbs_add_mark.insert(END, i)
+    lbs_add_mark.grid(row=1,column=1)
 
+    Label(add_mark,text='Mark:').grid(row=2)
 
-    idt_teacher=int(teacher_id.get())
+    mark_add_mark=Entry(add_mark)
+    mark_add_mark.grid(row=2,column=1)
 
-    check=bl.teacher.check_id(idt_teacher)
-
-    if check==True:
-        nextt.destroy()
-
-        Label(add_mark, text="student:").grid(row=1)
-
-        lbs = Listbox(add_mark)
-        l = bl.unit_select.select_student(idt_teacher)
-
-        for i in l:
-            lbs.insert(END, i)
-        lbs.grid(row=1,column=1)
-
-        Label(add_mark,text='Mark:').grid(row=2)
-
-        mark=Entry(add_mark)
-        mark.grid(row=2,column=1)
-
-        add=Button(add_mark,text='Add', width=25, command=Add_mark3)
-        add.grid(row=3)
-
-    else:
-        messagebox.showerror("Add mark", 'id:' + str(idt_teacher) + '\t' + 'Not found')
-        add_mark.destroy()
-        Add_mark()
+    add=Button(add_mark,text='Add', width=25, command=Add_mark3)
+    add.grid(row=3)
 
 def Add_mark3():
-    global lbs, mark, idt_teacher
+    global lbs_add_mark, mark_add_mark, main_id
 
-    student=lbs.get(ANCHOR)
-    mark2=float(mark.get())
+    student=lbs_add_mark.get(ANCHOR)
+    mark=float(mark_add_mark.get())
 
-    if mark2>20 or mark2<0 :
+    if mark>20 or mark<0 :
         messagebox.showerror('Add mark ','Mark is out of range!!')
     else:
-        bl.unit_select.addmark(idt_teacher,student[0],mark2)
+        bl.unit_select.addmark(main_id,student[0],mark)
         messagebox.showinfo('Add mark','Added :)')
 
 #.......................
 
+
 def Get_report_cart():
-    global student_idg, get_report_cart, get
 
-    get_report_cart = Tk()
-    get_report_cart.title('Get report cart')
-    get_report_cart.geometry("425x400")
-
-    Label(get_report_cart, text='student id :').grid(row=0)
-
-    student_idg = Entry(get_report_cart)
-    student_idg.grid(row=0, column=1)
-
-    get = Button(get_report_cart, text='Get', width=25, command=Get_report_cart2)
-    get.grid(row=1)
-
-def Get_report_cart2():
-    global student_idg, get_report_cart, get
-
-    ids_student = int(student_idg.get())
-    check = bl.student.check_id(ids_student)
-
-    if check == True:
-        L=bl.unit_select.select(ids_student)
-
-        name_s,family_s = bl.student.search(ids_student)
-
-        txt='____________________________Report cart____________________________'
-        txt+='\n'+'Date: '+str(date.today())+'\t'+'Name: '+name_s +' '+ family_s+'\t\t'+'ID:'+str(ids_student)
-        txt+='\n'+'-------------------------------------------------------------------'
-        txt+='\n'+'Count'+'\t'+'teacher'+'\t\t\t\t'+'Course'+'\t\t\t\t'+'Mark'
-
-        count=1
-        summark=0
-        for i in L:
-            name_t, family_t=bl.teacher.search(i[2])
-            name_c=bl.course.search(i[3])
-            txt+='\n'+str(count)+'\t\t'+name_t+' '+family_t+'\t\t\t'+name_c+'\t\t'+str(i[4])
-            summark+=i[4]
-            count+=1
-
-        txt+='\n'+'___________________________________________________________________'
-        txt+='\n'+'Average: '+str(bl.student.getavg(ids_student))+'\t\t'+'Total sum:'+str(summark)
-
-        n='Report of cart id {} .txt'.format(str(ids_student))
-        file=open(n,'w')
-        file.write(txt)
-        messagebox.showinfo('Get report cart','Saved :)')
-
-    else:
-        messagebox.showerror("Get report cart", 'id:' + str(ids_student) + '\t' + 'Not found')
-        get_report_cart.destroy()
-        Get_report_cart()
+    bl.unit_select.get_report_cart(main_id)
+    messagebox.showinfo('Get report cart','Saved :)')
 
 #.......................
 
@@ -316,32 +269,173 @@ def Getplot():
     bl.student.getplot()
 
 
-#---------------------------------------------------------------------
+#...........................................................................................
+
+
+
+def Login():
+    global id_login, password_login,var_login,login
+
+
+    login = Tk()
+    login.title('Login')
+    login.geometry("500x300")
+    var_login = IntVar()
+
+
+    student_radio = Radiobutton(login, text='Student', variable=var_login, value=1)
+    student_radio.grid(row=2, column=1)
+
+    teacher_radio = Radiobutton(login, text='Teacher', variable=var_login, value=2)
+    teacher_radio.grid(row=2)
+
+    admin_radio = Radiobutton(login, text='Admin', variable=var_login, value=3)
+    admin_radio.grid(row=2, column=2)
+
+    Label(login, text='ID').grid(row=0)
+    Label(login, text='Password').grid(row=1)
+
+    id_login = Entry(login, width=25)
+    id_login.grid(row=0, column=1)
+
+    password_login = Entry(login, width=25)
+    password_login.grid(row=1, column=1)
+
+    Login_button = Button(login, text="Login", width=25, command=Login2)
+    Login_button.grid(row=3)
+
+
+def Login2():
+    global id_login, password_login,var_login,login
+    global main_name, main_id ,role
+
+    role=var_login.get()
+    id = int(id_login.get())
+    password = password_login.get()
+
+    # checks for student
+    if role == 1:
+        check = bl.student.check_id(id)
+
+        if check == True:
+            check2 = bl.student.check_password(id, password)
+            if check2 == True:
+                name, family = bl.student.search(id)
+                main_name = name + ' ' + family
+                main_id = id
+                role='student'
+
+                login.destroy()
+                main.destroy()
+                Home()
+
+                messagebox.showinfo('Login', 'Welcome   '+main_name)
+
+            else:
+                messagebox.showerror('Login', 'Wrong id or password')
+
+        else:
+            messagebox.showerror('Login', 'Wrong id or password')
+
+    # checks for teacher
+    if role == 2:
+        check = bl.teacher.check_id(id)
+
+        if check == True:
+            check2 = bl.teacher.check_password(id, password)
+            if check2 == True:
+                name, family = bl.teacher.search(id)
+                main_name = name + ' ' + family
+                main_id = id
+                role='teacher'
+
+                login.destroy()
+                main.destroy()
+                Home()
+
+                messagebox.showinfo('Login', 'Welcome   '+main_name)
+
+            else:
+                messagebox.showerror('Login', 'Wrong id or password')
+
+        else:
+            messagebox.showerror('Login', 'Wrong id or password')
+
+    # checks for admin
+    if role == 3:
+        check = bl.admin.check_id(id)
+
+        if check == True:
+            check2 = bl.admin.check_password(id, password)
+            if check2 == True:
+                name, family = bl.admin.search(id)
+                main_name = name + ' ' + family
+                main_id = id
+                role='admin'
+
+                login.destroy()
+                main.destroy()
+                Home()
+
+                messagebox.showinfo('Login', 'Welcome   '+main_name)
+
+            else:
+                messagebox.showerror('Login', 'Wrong id or password')
+
+        else:
+            messagebox.showerror('Login', 'Wrong id or password')
+
+# ============================================================================
+
+def Home():
+    global role,main_id,main_name
+
+    home=Tk()
+    home.title('Home')
+    home.geometry("890x500")
+
+    Label(home,text='Role :  '+(role)+'\t\t',font=('Times 14')).grid(row=0)
+    Label(home, text='ID :  ' + str(main_id)+'\t\t',font=('Times 14')).grid(row=0,column=1)
+    Label(home, text='Name :  ' + (main_name)+'\t\t',font=('Times 14')).grid(row=0, column=2)
+
+    if role=='student':
+        unit_selection = Button(home, text='Unit selection', font=('Times 14'), width=25, command=Unit_selection)
+        unit_selection.grid(row=1)
+        reportcart = Button(home, text='Get report cart', font=('Times 14'), width=25, command=Get_report_cart)
+        reportcart.grid(row=2)
+
+    if role=='teacher':
+        course=bl.teacher.select_course(main_id)
+        Label(home,text='course : '+course,font=('Times 14')).grid(row=0,column=3)
+
+        addmark = Button(home, text='Add mark', font=('Times 14'), width=25, command=Add_mark)
+        addmark.grid(row=1)
+
+    if role=='admin':
+        report = Button(home, text='Report', font=('Times 14'), width=25, command=Report)
+        report.grid(row=1)
+        add_course = Button(home, text='Add Course', width=25, font=('Times 14'), command=Add_course)
+        add_course.grid(row=2)
+        add_teacher = Button(home, text='Add Teacher', width=25, font=('Times 14'), command=Add_teacher)
+        add_teacher.grid(row=3)
+
+
+# .............................................................
+
+Login()
 main=Tk()
 main.title('School')
-main.geometry("500x300")
-frame1=Frame(main)
-frame1.pack(side=LEFT)
-frame2=Frame(main)
-frame2.pack(side=RIGHT)
+main.geometry("600x500")
 
-student=Button(frame1,text='Add student',font=('Times 14'), width=25,command=Add_student)
-student.grid(row=0)
-teacher=Button(frame1,text='Add teacher',font=('Times 14'), width=25,command=Add_teacher)
-teacher.grid(row=1)
-course=Button(frame1,text='Add course',font=('Times 14'), width=25,command=Add_course)
-course.grid(row=2)
+Label(main,text='Welcome to School',fg='#2debb8',font=('Times 14'), width=60, height=15).grid(row=0)
 
-#.............................................................
-
-Unitselection=Button(frame2,text='Unit selection',font=('Times 14'), width=25,command=Unit_selection)
-Unitselection.grid(row=0)
-addmark=Button(frame2,text='Add mark',font=('Times 14'), width=25,command=Add_mark)
-addmark.grid(row=1)
-report=Button(frame2,text='Report',font=('Times 14'), width=25,command=Report)
-report.grid(row=2)
-reportcart=Button(frame2,text='Get report cart',font=('Times 14'), width=25,command=Get_report_cart)
-reportcart.grid(row=3)
+about_school =Button(main,text='About School',font=('Times 14'), width=50,bg='#ffffff')
+about_school.grid(row=3)
+login_B=Button(main,text='Login',font=('Times 14'), width=25,bg='#0afffb',command=Login)
+login_B.grid(row=2)
+sing_up =Button(main,text='Sing up student',font=('Times 14'), width=25,bg='#ebff0a',command=Add_student)
+sing_up.grid(row=1)
 
 
 mainloop()
+
