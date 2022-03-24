@@ -1,39 +1,41 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, Entry, Tk
+from typing import Tuple
+
 import s_bl as bl
 
 
-main_id=0
-main_name=0
-role=0
+main_id = 0
+main_name = ""
+role = ""
 
 def Add_student():
     global name_student
     global family_student
     global password_student
 
-    addstudent=Tk()
-    addstudent.title('Add student')
-    addstudent.geometry("425x100")
+    Add_student_Tk=Tk()
+    Add_student_Tk.title('Add student')
+    Add_student_Tk.geometry("425x100")
 
-    Label(addstudent, text='Name' ).grid(row=0)
-    Label(addstudent, text='Family' ).grid(row=1)
-    Label(addstudent, text='Password').grid(row=2)
+    Label(Add_student_Tk, text='Name' ).grid(row=0)
+    Label(Add_student_Tk, text='Family' ).grid(row=1)
+    Label(Add_student_Tk, text='Password').grid(row=2)
 
-    name_student =Entry(addstudent,width=25)
+    name_student =Entry(Add_student_Tk,width=25)
     name_student.grid(row=0, column=1)
 
-    family_student =Entry(addstudent,width=25)
+    family_student =Entry(Add_student_Tk,width=25)
     family_student.grid(row=1, column=1)
 
-    password_student = Entry(addstudent, width=25)
+    password_student = Entry(Add_student_Tk, width=25)
     password_student.grid(row=2, column=1)
 
 
-    Add=Button(addstudent, text='Add', width=25,command=adds )
+    Add=Button(Add_student_Tk, text='Add', width=25,command=Add_student2 )
     Add.grid(row=3)
 
-def adds():
+def Add_student2():
     global name_student
     global family_student
     global password_student
@@ -60,35 +62,35 @@ def Add_teacher():
     global password_teacher
     global lbc
 
-    addteacher=Tk()
-    addteacher.title('Add teacher')
-    addteacher.geometry("425x400")
+    Add_teacher_Tk=Tk()
+    Add_teacher_Tk.title('Add teacher')
+    Add_teacher_Tk.geometry("425x400")
 
-    Label(addteacher, text='Name' ).grid(row=0)
-    Label(addteacher, text='Family').grid(row=1)
-    Label(addteacher, text='Password').grid(row=2)
+    Label(Add_teacher_Tk, text='Name' ).grid(row=0)
+    Label(Add_teacher_Tk, text='Family').grid(row=1)
+    Label(Add_teacher_Tk, text='Password').grid(row=2)
 
-    name_teacher =Entry(addteacher,width=25)
+    name_teacher =Entry(Add_teacher_Tk,width=25)
     name_teacher.grid(row=0, column=1)
 
-    family_teacher =Entry(addteacher,width=25)
+    family_teacher =Entry(Add_teacher_Tk,width=25)
     family_teacher.grid(row=1, column=1)
 
-    password_teacher=Entry(addteacher,width=25)
+    password_teacher=Entry(Add_teacher_Tk,width=25)
     password_teacher.grid(row=2, column=1)
 
-    Label(addteacher,text="Course:").grid(row=3)
+    Label(Add_teacher_Tk,text="Course:").grid(row=3)
 
-    lbc=Listbox(addteacher)
+    lbc=Listbox(Add_teacher_Tk)
     l = bl.course.select()
     for i in l :
         lbc.insert(END,i)
     lbc.grid(row=3,column=1)
 
-    Add=Button(addteacher, text='Add', width=25,command=addt )
+    Add=Button(Add_teacher_Tk, text='Add', width=25,command=Add_teacher2 )
     Add.grid(row=4)
 
-def addt():
+def Add_teacher2():
     global name_teacher
     global family_teacher
     global password_teacher
@@ -116,19 +118,19 @@ def addt():
 def Add_course():
     global name_course
 
-    addcourse=Tk()
-    addcourse.title('Add course')
-    addcourse.geometry("425x100")
+    Add_course_Tk=Tk()
+    Add_course_Tk.title('Add course')
+    Add_course_Tk.geometry("425x100")
 
-    Label(addcourse, text='Name' ).grid(row=0)
+    Label(Add_course_Tk, text='Name' ).grid(row=0)
 
-    name_course =Entry(addcourse,width=25)
+    name_course =Entry(Add_course_Tk,width=25)
     name_course.grid(row=0, column=1)
 
-    Add=Button(addcourse, text='Add', width=25,command=addc )
+    Add=Button(Add_course_Tk, text='Add', width=25,command=Add_course2 )
     Add.grid(row=3)
 
-def addc():
+def Add_course2():
     global name_course
 
     name = name_course.get()
@@ -252,7 +254,7 @@ def Report():
     report.title('Report')
     report.geometry("400x150")
 
-    total,best,worst=bl.student.get_all_avg()
+    total, best,worst = bl.student.get_all_avg()
 
     Label(report,text='Total Average :').grid(row=0)
     Label(report, text='Best student :').grid(row=1)
@@ -262,11 +264,58 @@ def Report():
     Label(report, text=best).grid(row=1,column=1)
     Label(report, text=worst).grid(row=2,column=1)
 
-    getplot=Button(report, text='Get plot ', width=25, command=Getplot)
-    getplot.grid(row=3)
+    get_plot = Button(report, text='Get plot ', width=25, command=Get_plot)
+    get_plot.grid(row=3)
 
-def Getplot():
+def Get_plot():
     bl.student.getplot()
+
+#...........................................................................................
+
+def change_password():
+    global new_password_entry_change_password
+    global confirm_password_entry_change_password
+    global change_password_Tk
+
+    change_password_Tk = Tk()
+    change_password_Tk.title('Change password')
+    change_password_Tk.geometry("400x200")
+
+    new_password_label_change_password = Label(change_password_Tk, text='New password: ').grid(row=0)
+    confirm_password_label_change_password = Label(change_password_Tk, text='Confirm password: ').grid(row=1)
+
+    new_password_entry_change_password = Entry(change_password_Tk)
+    new_password_entry_change_password.grid(row=0,column=1)
+    confirm_password_entry_change_password = Entry(change_password_Tk)
+    confirm_password_entry_change_password.grid(row=1,column=1)
+
+    change_change_password = Button(change_password_Tk, text='Change',command=change_password2, width=25)
+    change_change_password.grid(row=2)
+
+def change_password2():
+    global main_id, role, change_password_Tk
+    global new_password_entry_change_password
+    global confirm_password_entry_change_password
+
+    new_password = (new_password_entry_change_password.get())
+    confirm_password = (confirm_password_entry_change_password.get())
+
+    if new_password == confirm_password:
+        check = bl.change_password(new_password, role, main_id)
+
+        if check == True:
+            messagebox.showinfo("Change password", 'Password changed successfully :)')
+            change_password_Tk.destroy()
+
+        elif role == 'admin':
+            messagebox.showerror("Change password", 'The number of characters in the password must be 6 and 15 characters')
+
+        else:
+
+            messagebox.showerror("Change password", 'The number of characters in the password must be 6 and 10 characters')
+
+    else:
+        messagebox.showerror("Change password", 'New password and confirm password are not mach ')
 
 
 #...........................................................................................
@@ -274,7 +323,7 @@ def Getplot():
 
 
 def Login():
-    global id_login, password_login,var_login,login
+    global id_login, password_login, var_login, login
 
 
     login = Tk()
@@ -401,23 +450,31 @@ def Home():
     if role=='student':
         unit_selection = Button(home, text='Unit selection', font=('Times 14'), width=25, command=Unit_selection)
         unit_selection.grid(row=1)
-        reportcart = Button(home, text='Get report cart', font=('Times 14'), width=25, command=Get_report_cart)
-        reportcart.grid(row=2)
+        Report_cart = Button(home, text='Get report cart', font=('Times 14'), width=25, command=Get_report_cart)
+        Report_cart.grid(row=2)
+        Change_password_Button_Home = Button(home, text="Change Password", width=25, font=('Times 14'),command=change_password)
+        Change_password_Button_Home.grid(row=1,column=1)
 
     if role=='teacher':
         course=bl.teacher.select_course(main_id)
         Label(home,text='course : '+course,font=('Times 14')).grid(row=0,column=3)
 
-        addmark = Button(home, text='Add mark', font=('Times 14'), width=25, command=Add_mark)
-        addmark.grid(row=1)
+        Add_mark_Button_Home = Button(home, text='Add mark', font=('Times 14'), width=25, command=Add_mark)
+        Add_mark_Button_Home.grid(row=1)
+        Change_password_Button_Home = Button(home, text="Change Password", width=25, font=('Times 14'),command=change_password)
+        Change_password_Button_Home.grid(row=1, column=1)
 
-    if role=='admin':
+    if role == 'admin':
         report = Button(home, text='Report', font=('Times 14'), width=25, command=Report)
         report.grid(row=1)
         add_course = Button(home, text='Add Course', width=25, font=('Times 14'), command=Add_course)
         add_course.grid(row=2)
         add_teacher = Button(home, text='Add Teacher', width=25, font=('Times 14'), command=Add_teacher)
         add_teacher.grid(row=3)
+        Change_password_Button_Home = Button(home, text="Change Password", width=25, font=('Times 14'),command=change_password)
+        Change_password_Button_Home.grid(row=1, column=1)
+
+
 
 
 # .............................................................

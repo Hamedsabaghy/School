@@ -14,7 +14,7 @@ def creat_table():
 
     connection.commit()
 
-    P = 132145, 'admin', 'admin', 'adminmain', 1
+    P = (132145, 'admin', 'admin', 'adminmain', 1)
     cursor.execute("INSERT INTO admin VALUES (?,?,?,?,?)",P)
 
     connection.commit()

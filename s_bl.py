@@ -299,3 +299,18 @@ def checkpassword(password,max):
     password_letters=len(password)
     if password_letters<=max and password_letters>=6:
         return True
+    else :
+        return False
+
+def change_password(password,role,id):
+    if role=='admin':
+        check=checkpassword(password,15)
+    elif role=='student' or role=='teacher' :
+        check=checkpassword(password,10)
+
+    if check == True:
+        Q='update {} set password={} where id={}'.format(role,password,str(id))
+        dbm.update(Q)
+        return True
+    else:
+        return False
