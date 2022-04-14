@@ -266,15 +266,15 @@ class unit_select:
         dbm.update(Q)
         
     @staticmethod
-    def get_report_cart(main_id):
+    def get_report_cart(main_id,location):
         
         L=unit_select.select(main_id)
 
         name_student,family_student =student.search(main_id)
 
-        txt='____________________________Report cart____________________________'
+        txt='____________________________________________Report cart____________________________________________'
         txt+='\n'+'Date: '+str(date.today())+'\t'+'Name: '+name_student +' '+ family_student+'\t\t'+'ID:'+str(main_id)
-        txt+='\n'+'-------------------------------------------------------------------'
+        txt+='\n'+'---------------------------------------------------------------------------------------------------'
         txt+='\n'+'Count'+'\t'+'Teacher'+'\t\t\t\t'+'Course'+'\t\t\t\t'+'Mark'
 
         count=1
@@ -286,10 +286,11 @@ class unit_select:
             summark+=i[4]
             count+=1
 
-        txt+='\n'+'___________________________________________________________________'
+        txt+='\n'+'___________________________________________________________________________________________________'
         txt+='\n'+'Average: '+str(student.getavg(main_id))+'\t\t'+'Total sum:'+str(summark)
 
-        n='Report cart of id {} .txt'.format(str(main_id))
+        n='{}\Report cart of id {} .txt'.format(location,str(main_id))
+
         file=open(n,'w')
         file.write(txt)
         

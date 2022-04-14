@@ -1,3 +1,4 @@
+import tkinter.filedialog
 from tkinter import *
 from tkinter import messagebox, Entry, Tk
 from typing import Tuple
@@ -243,8 +244,9 @@ def Add_mark3():
 
 
 def Get_report_cart():
+    location = tkinter.filedialog.askdirectory()
 
-    bl.unit_select.get_report_cart(main_id)
+    bl.unit_select.get_report_cart(main_id,location)
     messagebox.showinfo('Get report cart','Saved :)')
 
 #.......................
