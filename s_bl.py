@@ -310,7 +310,7 @@ def change_password(password,role,id):
         check=checkpassword(password,10)
 
     if check == True:
-        Q='update {} set password={} where id={}'.format(role,password,str(id))
+        Q='update {} set password={} where id={}'.format(role,"'"+password+"'",str(id))
         dbm.update(Q)
         return True
     else:

@@ -1,7 +1,7 @@
-import tkinter.filedialog
+import tkinter
+from tkinter import filedialog
+from tkinter import messagebox
 from tkinter import *
-from tkinter import messagebox, Entry, Tk
-from typing import Tuple
 
 import s_bl as bl
 
@@ -61,7 +61,7 @@ def Add_teacher():
     global name_teacher
     global family_teacher
     global password_teacher
-    global lbc
+    global lbc_Add_teacher
 
     Add_teacher_Tk=Tk()
     Add_teacher_Tk.title('Add teacher')
@@ -82,11 +82,15 @@ def Add_teacher():
 
     Label(Add_teacher_Tk,text="Course:").grid(row=3)
 
-    lbc=Listbox(Add_teacher_Tk)
+    scrollbar_add_teacher=Scrollbar(Add_teacher_Tk)
+    scrollbar_add_teacher.grid(row=3, column=1)
+
+    lbc_Add_teacher=Listbox(Add_teacher_Tk,yscrollcommand=scrollbar_add_teacher.set)
     l = bl.course.select()
     for i in l :
-        lbc.insert(END,i)
-    lbc.grid(row=3,column=1)
+        lbc_Add_teacher.insert(END,i)
+    lbc_Add_teacher.grid(row=3,column=1)
+    scrollbar_add_teacher.config(command=lbc_Add_teacher.yview)
 
     Add=Button(Add_teacher_Tk, text='Add', width=25,command=Add_teacher2 )
     Add.grid(row=4)
@@ -95,12 +99,12 @@ def Add_teacher2():
     global name_teacher
     global family_teacher
     global password_teacher
-    global lbc
+    global lbc_Add_teacher
 
     name=name_teacher.get()
     family=family_teacher.get()
     password_T=password_teacher.get()
-    course = lbc.get(ANCHOR)
+    course = lbc_Add_teacher.get(ANCHOR)
     idc = course[0]
 
     check=bl.checkpassword(password_T,10)
@@ -153,13 +157,17 @@ def Unit_selection ():
     
     Label(unit_selection, text="Course:").grid(row=1)
 
-    lbc_unit_selection = Listbox(unit_selection)
+    scrollbar_course_unit_selection=Scrollbar(unit_selection)
+    scrollbar_course_unit_selection.grid(row=1,column=1)
+
+    lbc_unit_selection = Listbox(unit_selection,yscrollcommand=scrollbar_course_unit_selection.set)
     l = bl.course.select()
     
     for i in l:
         lbc_unit_selection.insert(END, i)
 
     lbc_unit_selection.grid(row=1,column=1)
+    scrollbar_course_unit_selection.config(command=lbc_unit_selection.yview)
 
     next_button_unit_selection = Button(unit_selection, text='Next', width=25, command=Unit_selection2)
     next_button_unit_selection.grid(row=2)
@@ -175,13 +183,17 @@ def Unit_selection2():
 
     Label(unit_selection, text="Teacher:").grid(row=2)
 
-    lbt_unit_selection = Listbox(unit_selection)
+    scrollbar_teacher_unit_selection = Scrollbar(unit_selection)
+    scrollbar_teacher_unit_selection.grid(row=2, column=1)
+
+    lbt_unit_selection = Listbox(unit_selection,yscrollcommand=scrollbar_teacher_unit_selection.set)
     l = bl.teacher.select(course)
 
     for i in l:
         lbt_unit_selection.insert(END, i)
 
     lbt_unit_selection.grid(row=2,column=1)
+    scrollbar_teacher_unit_selection.config(command=lbt_unit_selection.yview)
 
     OK_button = Button(unit_selection, text='OK', width=25, command=Unit_selection3)
     OK_button.grid(row=3)
@@ -212,13 +224,16 @@ def Add_mark():
 
     Label(add_mark, text="student:").grid(row=1)
 
-    lbs_add_mark = Listbox(add_mark)
+    scrollbar_add_mark = Scrollbar(unit_selection)
+    scrollbar_add_mark.grid(row=1, column=1)
+
+    lbs_add_mark = Listbox(add_mark,yscrollcommand=scrollbar_add_mark.set)
     l = bl.unit_select.select_student(main_id)
-    print(l)
 
     for i in l:
         lbs_add_mark.insert(END, i)
     lbs_add_mark.grid(row=1,column=1)
+    scrollbar_add_mark.config(command=lbs_add_mark.yview)
 
     Label(add_mark,text='Mark:').grid(row=2)
 
@@ -244,7 +259,7 @@ def Add_mark3():
 
 
 def Get_report_cart():
-    location = tkinter.filedialog.askdirectory()
+    location = filedialog.askdirectory()
 
     bl.unit_select.get_report_cart(main_id,location)
     messagebox.showinfo('Get report cart','Saved :)')
