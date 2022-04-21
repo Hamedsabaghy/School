@@ -28,7 +28,7 @@ class student:
         return l[0][0]
 
     @staticmethod
-    def allname():
+    def All_name():
         Q='select name,family from student'
         l=dbm.select(Q)
 
@@ -43,7 +43,7 @@ class student:
         L=dbm.select(Q)
         return L[0][0],L[0][1]
     @staticmethod
-    def getavg(ids):
+    def Get_avg(ids):
         Q='select avg from student where id={}'.format(ids)
         L=dbm.select(Q)
         return L[0][0]
@@ -68,10 +68,10 @@ class student:
         return (Total,Best,Worst)
 
     @staticmethod
-    def getplot():
+    def Get_plot():
         global Marks
 
-        names=student.allname()
+        names=student.All_name()
         plt.bar(names,Marks)
         plt.show()
         plt.savefig('plot.png')
@@ -150,8 +150,16 @@ class teacher:
 
 class admin:
     def __init__(self, name, family, password, access):
+        def get_id():
+            id=random.randrange(10 ** 5, 999999)
+            Q = 'Select count(*) from admin where id={}'.format(id)
+            l = dbm.select(Q)
+            if l[0][0] == 0 :
+                return id
+            else:
+                get_id()
 
-        self.id = random.randrange(10**5, 999999)
+        self.id = get_id()
         self.name = name
         self.family = family
         self.password = password
@@ -183,6 +191,12 @@ class admin:
     def check_id(id):
         Q = 'Select count(*) from admin where id={}'.format(id)
         l = dbm.select(Q)
+        return l[0][0]
+
+    @staticmethod
+    def select_access(id):
+        Q='SELECT access FROM Admin WHERE id={}'.format(id)
+        l=dbm.select(Q)
         return l[0][0]
 
 
@@ -241,7 +255,7 @@ class unit_select:
         return L
 
     @staticmethod
-    def addmark(idt,ids,mark):
+    def Add_mark(idt,ids,mark):
         Q='update unit_select set mark={} where ids={} AND idt={}'.format(mark,ids,idt)
         dbm.update(Q)
         unit_select.avg(ids)
@@ -278,16 +292,16 @@ class unit_select:
         txt+='\n'+'Count'+'\t'+'Teacher'+'\t\t\t\t'+'Course'+'\t\t\t\t'+'Mark'
 
         count=1
-        summark=0
+        sum_mark=0
         for i in L:
             name_teacher, family_teacher=teacher.search(i[3])
             name_course=course.search(i[2])
             txt+='\n'+str(count)+'\t\t'+name_teacher+' '+family_teacher+'\t\t\t'+name_course+'\t\t'+str(i[4])
-            summark+=i[4]
+            sum_mark+=i[4]
             count+=1
 
         txt+='\n'+'___________________________________________________________________________________________________'
-        txt+='\n'+'Average: '+str(student.getavg(main_id))+'\t\t'+'Total sum:'+str(summark)
+        txt+='\n'+'Average: '+str(student.Get_avg(main_id))+'\t\t'+'Total sum:'+str(sum_mark)
 
         n='{}\Report cart of id {} .txt'.format(location,str(main_id))
 
@@ -296,7 +310,7 @@ class unit_select:
         
         
 
-def checkpassword(password,max):
+def check_password(password,max):
     password_letters=len(password)
     if password_letters<=max and password_letters>=6:
         return True
@@ -305,9 +319,9 @@ def checkpassword(password,max):
 
 def change_password(password,role,id):
     if role=='admin':
-        check=checkpassword(password,15)
+        check=check_password(password,15)
     elif role=='student' or role=='teacher' :
-        check=checkpassword(password,10)
+        check=check_password(password,10)
 
     if check == True:
         Q='update {} set password={} where id={}'.format(role,"'"+password+"'",str(id))

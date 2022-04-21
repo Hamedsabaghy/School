@@ -6,7 +6,7 @@ def creat_table():
     connection=sql.connect('S_Databass.db')
     cursor=connection.cursor()
 
-    cursor.execute('CREATE TABLE admin(id int PRIMARY KEY,name nvarchar(20) ,family nvarchar(20), password nvarchar(15),access int)')
+    cursor.execute('CREATE TABLE admin(id int ,name nvarchar(20) ,family nvarchar(20), password nvarchar(15),access int)')
     cursor.execute('CREATE TABLE student(id int PRIMARY KEY , name nvarchar(20) ,family nvarchar(20), avg real , password nvarchar(10))')
     cursor.execute('CREATE TABLE teacher(id int PRIMARY KEY , name nvarchar(20) ,family nvarchar(20) ,idc int, password nvarchar(10))')
     cursor.execute('CREATE TABLE course(id int PRIMARY KEY ,name nvarchar(20))')
@@ -14,7 +14,7 @@ def creat_table():
 
     connection.commit()
 
-    P = (132145, 'admin', 'admin', 'adminmain', 1)
+    P = (132145, 'main', 'admin', 'adminmain', 1)
     cursor.execute("INSERT INTO admin VALUES (?,?,?,?,?)",P)
 
     connection.commit()
