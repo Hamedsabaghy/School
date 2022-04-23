@@ -68,20 +68,20 @@ class student:
         best=Marks.index(max(Marks))
         worst=Marks.index(min(Marks))
 
-        name_b,family_b=student.search(best+1)
-        name_w,family_w=student.search(worst+1)
+        name_b,family_b=student.search(best+2000)
+        name_w,family_w=student.search(worst+2000)
         Best=name_b+' '+family_b
         Worst=name_w+' '+family_w
         return (Total,Best,Worst)
 
     @staticmethod
-    def Get_plot():
+    def Get_plot(location):
         global Marks
 
         names=student.All_name()
         plt.bar(names,Marks)
         plt.show()
-        plt.savefig('plot.png')
+        plt.savefig(location+'plot.png')
 
     @staticmethod
     def check_password(ids,password_s):
@@ -337,30 +337,30 @@ class unit_select:
         dbm.update(Q)
         
     @staticmethod
-    def get_report_cart(main_id,location):
+    def get_report_cart(id,location):
         
-        L=unit_select.select(main_id)
+        L=unit_select.select(id)
 
-        name_student,family_student =student.search(main_id)
+        name_student,family_student =student.search(id)
 
         txt='____________________________________________Report cart____________________________________________'
-        txt+='\n'+'Date: '+str(date.today())+'\t'+'Name: '+name_student +' '+ family_student+'\t\t'+'ID:'+str(main_id)
+        txt+='\n'+'Date: '+str(date.today())+'\t'+'Name: '+name_student +' '+ family_student+'\t\t'+'ID:'+str(id)
         txt+='\n'+'---------------------------------------------------------------------------------------------------'
-        txt+='\n'+'Count'+'\t'+'Teacher'+'\t\t\t\t'+'Course'+'\t\t\t\t'+'Mark'
+        txt+='\n'+'Count'+'\t\t'+'Teacher'+'\t\t\t\t'+'Course'+'\t\t\t\t\t'+'Mark'
 
         count=1
         sum_mark=0
         for i in L:
             name_teacher, family_teacher=teacher.search(i[3])
             name_course=course.search(i[2])
-            txt+='\n'+str(count)+'\t\t'+name_teacher+' '+family_teacher+'\t\t\t'+name_course+'\t\t'+str(i[4])
+            txt+='\n'+str(count)+'\t\t'+name_teacher+' '+family_teacher+'\t\t\t'+name_course+'\t\t\t\t\t'+str(i[4])
             sum_mark+=i[4]
             count+=1
 
         txt+='\n'+'___________________________________________________________________________________________________'
-        txt+='\n'+'Average: '+str(student.Get_avg(main_id))+'\t\t'+'Total sum:'+str(sum_mark)
+        txt+='\n'+'Average: '+str(student.Get_avg(id))+'\t\t'+'Total sum:'+str(sum_mark)
 
-        n='{}\Report cart of id {} .txt'.format(location,str(main_id))
+        n='{}\Report cart of id {} .txt'.format(location,str(id))
 
         file=open(n,'w')
         file.write(txt)
@@ -396,6 +396,15 @@ def change_password(password,role,id):
     else:
         return False
 
+def check_name(name):
+    if len(name)>25:
+        return False
+    elif len(name)<=0:
+        return False
+    else:
+        return True
+
+
 def about_school_file():
     gb=glob('About school.txt')
 
@@ -407,3 +416,4 @@ def about_school_file():
     file = open('About school.txt', 'r')
 
     return file.read()
+

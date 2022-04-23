@@ -43,17 +43,23 @@ def Add_student2():
     family_S = family_student.get()
     password_S = password_student.get()
 
-    check = bl.check_password(password_S, 10)
-
-    if check == True :
-        s = bl.student(name_S, family_S, password_S)
-        s.insert()
-        l = bl.student.get(s)
-        txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2]
-        messagebox.showinfo('Add student ', 'Added student :)' + txt)
+    check_password = bl.check_password(password_S, 10)
+    check_name= bl.check_name(name_S)
+    check_family=bl.check_name(family_S)
+    if check_name==True:
+        if check_family==True:
+            if check_password == True :
+                s = bl.student(name_S, family_S, password_S)
+                s.insert()
+                l = bl.student.get(s)
+                txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2]
+                messagebox.showinfo('Add student ', 'Student successfully added   :)' + txt)
+            else:
+               messagebox.showerror('Add Student ', 'The number of characters in the password must be 6 to 10 characters')
+        else:
+            messagebox.showerror("Add Student", 'The letter of family must be 1 to 20 letters')
     else:
-        messagebox.showerror('Add student ', 'The number of characters in the password must be 6 to 10 characters')
-
+        messagebox.showerror("Add Student", 'The letter of name must be 1 to 20 letters')
 
 # .......................
 
@@ -109,18 +115,25 @@ def Add_teacher2():
     idc = course[0]
 
     check = bl.check_password(password_T, 10)
+    check_name=bl.check_name(name)
+    check_family=bl.check_name(family)
 
-    if check == True:
-        s = bl.teacher(name, family, idc, password_T)
-        s.insert()
-        l = bl.teacher.get(s)
-        txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2] + '  ' + 'id course: ' + str(
-            l[3])
-        messagebox.showinfo('Add teacher ', 'Added teacher :)' + txt)
+    if check_name==True:
+        if check_family==True:
+            if check == True:
+                s = bl.teacher(name, family, idc, password_T)
+                s.insert()
+                l = bl.teacher.get(s)
+                txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2] + '  ' + 'id course: ' + str(
+                    l[3])
+                messagebox.showinfo('Add teacher ', 'Teacher successfully added   :)' + txt)
 
+            else:
+                messagebox.showerror('Add teacher ', 'The number of characters in the password must be 6 to 10 characters')
+        else:
+            messagebox.showerror('Add teacher ','The letter of family must be 1 to 20 letters')
     else:
-        messagebox.showerror('Add teacher ', 'The number of characters in the password must be 6 to 10 characters')
-
+        messagebox.showerror('Add teacher ','The letter of name must be 1 to 20 letters')
 
 # .......................
 
@@ -145,11 +158,16 @@ def Add_course2():
 
     name = name_course.get()
 
-    s = bl.course(name)
-    s.insert()
-    l = bl.course.get(s)
-    txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1]
-    messagebox.showinfo('Add course ', 'Added course :)' + txt)
+    check_name=bl.check_name(name)
+    if check_name==True:
+
+        s = bl.course(name)
+        s.insert()
+        l = bl.course.get(s)
+        txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1]
+        messagebox.showinfo('Add course ', 'Course successfully added  :)' + txt)
+    else:
+        messagebox.showerror('Add course ', 'The letter of name must be 1 to 20 letters')
 
 
 # ..............................
@@ -164,19 +182,19 @@ def Add_admin_config(access):
 
     if access == 1:
 
-        text2 = 'Add admin by access 1,2,3 and delete admins with all access'
+        Text = 'Add admin by access 1,2,3 and delete admins with all access'
         
 
     elif access == 2:
 
-        text2 ='Add admin by access 2 and 3 and delete admins with access 2 and 3'
+        Text ='Add admin by access 2 and 3 and delete admins with access 2 and 3'
         
     elif access == 3:
 
-        text2 = "Can't add admin and delete admins with access 3"
+        Text = "Can't add admin and delete admins with access 3"
 
 
-    label.config(text=text2)
+    label.config(text = Text)
     
 def Add_admin():
     global name_admin, family_admin, password_admin, access, var_Add_admin, Add_admin_Tk
@@ -225,12 +243,24 @@ def Add_admin2():
     password = password_admin.get()
     access=var_Add_admin.get()
 
-    admin=bl.admin(name, family, password, access)
-    admin.insert()
+    check_password=bl.check_password(password,15)
+    check_name=bl.check_name(name)
+    check_family=bl.check_name(family)
+    if check_name==True:
+        if check_family==True:
+            if check_password==True:
+                admin=bl.admin(name, family, password, access)
+                admin.insert()
 
-    l = bl.admin.get(admin)
-    txt = '\t' + 'Id:' + str(l[0]) + '  ' + 'Name:' + l[1] + '  ' + 'family:' + l[2] + '  '+ 'access:' + str(l[4])
-    messagebox.showinfo('Add admin ', 'Added admin :)' + txt)
+                l = bl.admin.get(admin)
+                txt = '\t' + 'Id:' + str(l[0]) + '  ' + 'Name:' + l[1] + '  ' + 'family:' + l[2] + '  '+ 'access:' + str(l[4])
+                messagebox.showinfo('Add admin ', 'Admin successfully added  :)' + txt)
+            else:
+                messagebox.showerror('Add admin ', 'The number of characters in the password must be 6 to 15 characters' )
+        else:
+            messagebox.showerror('Add admin ','The letter of family must be 1 to 20 letters')
+    else:
+        messagebox.showerror('Add admin ', 'The letter of name must be 1 to 20 letters')
 
 #................................
 
@@ -313,7 +343,7 @@ def Add_mark():
 
     Label(add_mark, text="student:").grid(row=1)
 
-    scrollbar_add_mark = Scrollbar(unit_selection)
+    scrollbar_add_mark = Scrollbar(add_mark)
     scrollbar_add_mark.grid(row=1, column=1)
 
     lbs_add_mark = Listbox(add_mark, yscrollcommand=scrollbar_add_mark.set)
@@ -349,10 +379,9 @@ def Add_mark3():
 # .......................
 
 
-def Get_report_cart():
+def Get_report_cart(id):
     location = filedialog.askdirectory()
-
-    bl.unit_select.get_report_cart(main_id, location)
+    bl.unit_select.get_report_cart(id, location)
     messagebox.showinfo('Get report cart', 'Saved :)')
 
 
@@ -373,12 +402,13 @@ def Report():
     Label(report, text=best).grid(row=1, column=1)
     Label(report, text=worst).grid(row=2, column=1)
 
-    get_plot = Button(report, text='Get plot ', width=25, command=Get_plot)
-    get_plot.grid(row=3)
+    # get_plot = Button(report, text='Get plot ', width=25, command=Get_plot)
+    # get_plot.grid(row=3)
 
 
 def Get_plot():
-    bl.student.Get_plot()
+    location = filedialog.askdirectory()
+    bl.student.Get_plot(location)
 
 
 # ...........................................................................................
@@ -649,7 +679,7 @@ def Info_student():
 
     info_student_Tk = Tk()
     info_student_Tk.title('Information')
-    info_student_Tk.geometry('600x250')
+    info_student_Tk.geometry('600x300')
 
     id = listbox_Users_student.get(ANCHOR)
     id = id[0]
@@ -676,6 +706,8 @@ def Info_student():
     Label(row3, text='Courses: ', font=('Times 14')).place(x=0)
     Label(row3, text=courses, font=('Times 14')).place(x=80)
 
+    get_report_cart=Button(info_student_Tk, text='Get report cart', command=lambda : Get_report_cart(id))
+    get_report_cart.place(y=250)
 
 
 #.....................................
@@ -914,7 +946,7 @@ def Edit_about_school():
 
     edit_about_school_Tk = Tk()
     edit_about_school_Tk.title('Edit about school')
-    edit_about_school_Tk.geometry("500x400")
+    edit_about_school_Tk.geometry("500x420")
 
     Label(edit_about_school_Tk, text='Write text for show in the About school').place(x=0)
 
@@ -959,7 +991,72 @@ def About_school():
     scrollbar_about_school.config(command=text.yview())
     text.config(state= DISABLED)
 
+#....................................
 
+def Student_list_teacher():
+
+
+    Student_list_teacher_Tk=Tk()
+    Student_list_teacher_Tk.title('Students')
+    Student_list_teacher_Tk.geometry("300x250")
+
+    Label(Student_list_teacher_Tk,text='First select student and click the Buttons',fg="#808080").grid(row=0)
+
+
+    L=bl.unit_select.select_student(main_id)
+
+    scrollbar_Student_list_teacher= Scrollbar(Student_list_teacher_Tk,width=25)
+    scrollbar_Student_list_teacher.grid(row=1)
+
+    listbox_Student_list_teacher=Listbox(Student_list_teacher_Tk,width=25, yscrollcommand = scrollbar_Student_list_teacher.set)
+
+    for i in L:
+        listbox_Student_list_teacher.insert(END,i)
+
+    listbox_Student_list_teacher.grid(row=1)
+
+    scrollbar_Student_list_teacher.config(command=listbox_Student_list_teacher.yview)
+
+
+
+
+
+    information_Student_list_teacher=Button(Student_list_teacher_Tk, text='Information',width=25,
+                                            command=lambda : Student_list_teacher2(listbox_Student_list_teacher))
+    information_Student_list_teacher.grid(row=2)
+
+def Student_list_teacher2(list):
+
+    info_Student_list_teacher_Tk = Tk()
+    info_Student_list_teacher_Tk.title('Information')
+    info_Student_list_teacher_Tk.geometry('600x300')
+
+    id = list.get(ANCHOR)
+    id = id[0]
+
+    info = bl.student.info(id)
+    courses = bl.unit_select.course_student(id)
+
+    row1 = Frame(info_Student_list_teacher_Tk)
+    row1.place(width=600, height=100)
+
+    row2 = Frame(info_Student_list_teacher_Tk)
+    row2.place(width=600, height=100, y=100)
+
+    row3 = Frame(info_Student_list_teacher_Tk)
+    row3.place(width=600, height=40, y=200)
+
+    Label(row1, text='ID: ' + str(id), font=('Times 14')).place(x=0)
+    Label(row1, text='Name: ' + info[1], font=('Times 14')).place(x=200)
+    Label(row1, text='Family: ' + info[2], font=('Times 14')).place(x=400)
+
+    Label(row2, text='Average: ' + str(info[3]), font=('Times 14')).place(x=0)
+
+    Label(row3, text='Courses: ', font=('Times 14')).place(x=0)
+    Label(row3, text=courses, font=('Times 14')).place(x=80)
+
+    get_report_cart = Button(info_Student_list_teacher_Tk, text='Get report cart', command=lambda: Get_report_cart(id))
+    get_report_cart.place(y=250)
 
 # ...........................................................................................
 
@@ -1081,54 +1178,71 @@ def Login2():
 def Home():
     global role, main_id, main_name, access
 
-    home = Tk()
-    home.title('Home')
-    home.geometry("910x500")
+    home_Tk = Tk()
+    home_Tk.title('Home')
+    home_Tk.geometry("1000x500")
 
-    Label(home, text='Role :  ' + (role) + '\t\t', font=('Times 14')).grid(row=0)
-    Label(home, text='ID :  ' + str(main_id) + '\t\t', font=('Times 14')).grid(row=0, column=1)
-    Label(home, text='Name :  ' + (main_name) + '\t\t', font=('Times 14')).grid(row=0, column=2)
+    labels=Frame(home_Tk)
+    labels.place(width=1000, height=30)
+
+    buttons=Frame(home_Tk)
+    buttons.place(width=1000, height=470,y=30)
+
+
 
     if role == 'student':
-        unit_selection = Button(home, text='Unit selection', font=('Times 14'), width=25, command=Unit_selection)
+        home_Tk.geometry("600x400")
+        Label(labels, text='Role :  ' + (role) , font=('Times 14')).place(x=0)
+        Label(labels, text='ID :  ' + str(main_id) , font=('Times 14')).place(x=200)
+        Label(labels, text='Name :  ' + (main_name) , font=('Times 14')).place(x=400)
+
+        unit_selection = Button(buttons, text='Unit selection', font=('Times 14'), width=25, command=Unit_selection)
         unit_selection.grid(row=1)
-        Report_cart = Button(home, text='Get report cart', font=('Times 14'), width=25, command=Get_report_cart)
+        Report_cart = Button(buttons, text='Get report cart', font=('Times 14'), width=25, command=lambda : Get_report_cart(main_id))
         Report_cart.grid(row=2)
-        Change_password_Button_Home = Button(home, text="Change Password", width=25, font=('Times 14'),command=change_password)
+        Change_password_Button_Home = Button(buttons, text="Change Password", width=25, font=('Times 14'),command=change_password)
         Change_password_Button_Home.grid(row=1, column=1)
 
     if role == 'teacher':
-        course = bl.teacher.select_course(main_id)
-        Label(home, text='course : ' + course, font=('Times 14')).grid(row=0, column=3)
+        Label(labels, text='Role :  ' + (role) , font=('Times 14')).place(x=0)
+        Label(labels, text='ID :  ' + str(main_id) , font=('Times 14')).place(x=250)
+        Label(labels, text='Name :  ' + (main_name) , font=('Times 14')).place(x=500)
 
-        Add_mark_Button_Home = Button(home, text='Add mark', font=('Times 14'), width=25, command=Add_mark)
+        course = bl.teacher.select_course(main_id)
+        Label(labels, text='course : ' + course, font=('Times 14')).place(x=800)
+
+        Add_mark_Button_Home = Button(buttons, text='Add mark', font=('Times 14'), width=25, command=Add_mark)
         Add_mark_Button_Home.grid(row=1)
-        Change_password_Button_Home = Button(home, text="Change Password", width=25, font=('Times 14'),
-                                             command=change_password)
+        Change_password_Button_Home = Button(buttons, text="Change Password", width=25, font=('Times 14'),command=change_password)
         Change_password_Button_Home.grid(row=1, column=1)
+        student_list=Button(buttons, text='Student list', width=25, font=('Times 14'),command=Student_list_teacher)
+        student_list.grid(row=1, column=2)
 
     if role == 'admin':
-        access=bl.admin.select_access(main_id)
-        Label(home, text="Access: " + str(access), font=('Times 14')).grid(row=0, column=3)
+        Label(labels, text='Role :  ' + (role), font=('Times 14')).place(x=0)
+        Label(labels, text='ID :  ' + str(main_id), font=('Times 14')).place(x=250)
+        Label(labels, text='Name :  ' + (main_name), font=('Times 14')).place(x=500)
 
-        report = Button(home, text='Report', font=('Times 14'), width=25, command=Report)
+        access=bl.admin.select_access(main_id)
+        Label(labels, text="Access: " + str(access), font=('Times 14')).place(x=900)
+
+        report = Button(buttons, text='Report', font=('Times 14'), width=25, command=Report)
         report.grid(row=1)
-        add_course = Button(home, text='Add Course', width=25, font=('Times 14'), command=Add_course)
+        add_course = Button(buttons, text='Add Course', width=25, font=('Times 14'), command=Add_course)
         add_course.grid(row=2)
-        add_teacher = Button(home, text='Add Teacher', width=25, font=('Times 14'), command=Add_teacher)
+        add_teacher = Button(buttons, text='Add Teacher', width=25, font=('Times 14'), command=Add_teacher)
         add_teacher.grid(row=3)
-        Change_password_Button_Home = Button(home, text="Change Password", width=25, font=('Times 14'),command=change_password)
+        Change_password_Button_Home = Button(buttons, text="Change Password", width=25, font=('Times 14'),command=change_password)
         Change_password_Button_Home.grid(row=1, column=1)
 
         if access<3 :
-            print('ok')
-            Add_admin_Button= Button(home, text=" Add Admin", width=25, font=('Times 14'),command=Add_admin)
+            Add_admin_Button= Button(buttons, text=" Add Admin", width=25, font=('Times 14'),command=Add_admin)
             Add_admin_Button.grid(row=1, column=2)
 
-        users = Button(home, text='Users',width=25,font=('Times 14'),command=Users)
+        users = Button(buttons, text='Users',width=25,font=('Times 14'),command=Users)
         users.grid(row=2,column=1)
 
-        edit_about_school = Button(home, text='Edit about school', width=25, font=('Times 14'), command=Edit_about_school)
+        edit_about_school = Button(buttons, text='Edit about school', width=25, font=('Times 14'), command=Edit_about_school)
         edit_about_school.grid(row=3,column=1)
 
 
