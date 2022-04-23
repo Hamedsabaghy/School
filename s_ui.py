@@ -52,7 +52,7 @@ def Add_student2():
         txt = '\t' + 'id:' + str(l[0]) + '  ' + 'name:' + l[1] + '  ' + 'family:' + l[2]
         messagebox.showinfo('Add student ', 'Added student :)' + txt)
     else:
-        messagebox.showerror('Add student ', 'The number of characters in the password must be 6 and 10 characters')
+        messagebox.showerror('Add student ', 'The number of characters in the password must be 6 to 10 characters')
 
 
 # .......................
@@ -119,7 +119,7 @@ def Add_teacher2():
         messagebox.showinfo('Add teacher ', 'Added teacher :)' + txt)
 
     else:
-        messagebox.showerror('Add teacher ', 'The number of characters in the password must be 6 and 10 characters')
+        messagebox.showerror('Add teacher ', 'The number of characters in the password must be 6 to 10 characters')
 
 
 # .......................
@@ -229,7 +229,7 @@ def Add_admin2():
     admin.insert()
 
     l = bl.admin.get(admin)
-    txt = '\t' + 'Id:' + str(l[0]) + '  ' + 'Name:' + l[1] + '  ' + 'family:' + l[2] + '  '+ 'access:' + l[4]
+    txt = '\t' + 'Id:' + str(l[0]) + '  ' + 'Name:' + l[1] + '  ' + 'family:' + l[2] + '  '+ 'access:' + str(l[4])
     messagebox.showinfo('Add admin ', 'Added admin :)' + txt)
 
 #................................
@@ -421,16 +421,491 @@ def change_password2():
 
         elif role == 'admin':
             messagebox.showerror("Change password",
-                                 'The number of characters in the password must be 6 and 15 characters')
+                                 'The number of characters in the password must be 6 to 15 characters')
 
         else:
 
             messagebox.showerror("Change password",
-                                 'The number of characters in the password must be 6 and 10 characters')
+                                 'The number of characters in the password must be 6 to 10 characters')
 
     else:
         messagebox.showerror("Change password", 'New password and confirm password are not mach ')
+#...........................................................
 
+def Users():
+    users_Tk = Tk()
+    users_Tk.title('Users')
+    users_Tk.geometry("380x150")
+
+    students_Button_users=Button(users_Tk,text="Students", width=25, command=Users_student)
+    students_Button_users.grid(row=0)
+
+    teachers_Button_users = Button(users_Tk, text="Teachers", width=25, command=Users_teacher)
+    teachers_Button_users.grid(row=0, column=1)
+
+    admins_Button_users = Button(users_Tk, text="Admins", width=25, command=Users_admin)
+    admins_Button_users.grid(row=1)
+
+    courses_Button_users = Button(users_Tk, text="Courses", width=25, command=Users_course)
+    courses_Button_users.grid(row=1, column=1)
+
+
+def Users_student():
+    global users_student_Tk,listbox_Users_student
+
+
+    users_student_Tk=Tk()
+    users_student_Tk.title('Students')
+    users_student_Tk.geometry("420x250")
+
+    Label(users_student_Tk,text='First select student and click the Buttons',fg="#808080").grid(row=0)
+
+
+    L=bl.student.All_name()
+
+    scrollbar_Users_student= Scrollbar(users_student_Tk,width=25)
+    scrollbar_Users_student.grid(row=1)
+
+    listbox_Users_student=Listbox(users_student_Tk,width=25, yscrollcommand = scrollbar_Users_student.set)
+
+    for i in L:
+        listbox_Users_student.insert(END,i)
+
+    listbox_Users_student.grid(row=1)
+
+    scrollbar_Users_student.config(command=listbox_Users_student.yview)
+
+
+
+    delete_Users_Student=Button(users_student_Tk, text='Delete', width=25,command=Delete_student)
+    delete_Users_Student.grid(row=2)
+
+    information_Users_Student=Button(users_student_Tk, text='Information',width=25,command=Info_student)
+    information_Users_Student.grid(row=2,column=1)
+
+
+
+
+
+def Users_teacher():
+    global users_teacher_Tk, listbox_Users_teacher
+
+    users_teacher_Tk = Tk()
+    users_teacher_Tk.title('Teachers')
+    users_teacher_Tk.geometry("420x250")
+
+    Label(users_teacher_Tk,text='First select teacher and click the Buttons',fg="#808080").grid(row=0)
+
+    L=bl.teacher.All_name()
+
+    scrollbar_Users_teacher= Scrollbar(users_teacher_Tk, width=25)
+    scrollbar_Users_teacher.grid(row=1)
+
+    listbox_Users_teacher=Listbox(users_teacher_Tk,width=25, yscrollcommand =scrollbar_Users_teacher.set)
+
+    for i in L:
+
+        listbox_Users_teacher.insert(END,i)
+
+    listbox_Users_teacher.grid(row=1)
+
+    scrollbar_Users_teacher.config(command=listbox_Users_teacher.yview)
+
+    delete_Users_teacher=Button(users_teacher_Tk, text='Delete', width=25,command=Delete_teacher)
+    delete_Users_teacher.grid(row=2)
+
+    information_Users_teacher=Button(users_teacher_Tk, text='Information',width=25,command=info_teacher)
+    information_Users_teacher.grid(row=2,column=1)
+
+
+
+
+def Users_admin():
+    global users_admin_Tk, listbox_Users_admin,main_id
+
+    access=bl.admin.select_access(main_id)
+
+    users_admin_Tk = Tk()
+    users_admin_Tk.title('Admins')
+    users_admin_Tk.geometry("420x250")
+
+    Label(users_admin_Tk,text='First select admin and click the Buttons',fg="#808080").grid(row=0)
+
+    L=bl.admin.All_name()
+
+    scrollbar_Users_admin= Scrollbar(users_admin_Tk, width=25)
+    scrollbar_Users_admin.grid(row=1)
+
+    listbox_Users_admin=Listbox(users_admin_Tk,width=25, yscrollcommand = scrollbar_Users_admin.set)
+
+    for i in L:
+        if i[3]>=access:
+            List=list(i)
+            List.pop(3)
+            listbox_Users_admin.insert(END,List)
+
+    listbox_Users_admin.grid(row=1)
+
+    scrollbar_Users_admin.config(command=listbox_Users_admin.yview)
+
+    delete_Users_admin=Button(users_admin_Tk, text='Delete', width=25,command=Delete_admin)
+    delete_Users_admin.grid(row=2)
+
+    information_Users_admin=Button(users_admin_Tk, text='Information',width=25,command=info_admin)
+    information_Users_admin.grid(row=2,column=1)
+
+def Users_course():
+    global users_course_Tk, listbox_Users_course
+
+    users_course_Tk = Tk()
+    users_course_Tk.title('Courses')
+    users_course_Tk.geometry("420x250")
+
+
+    Label(users_course_Tk,text='First select course and click the Buttons',fg="#808080").grid(row=0)
+
+    L=bl.course.select()
+
+    scrollbar_Users_course= Scrollbar(users_course_Tk)
+    scrollbar_Users_course.grid(row=1)
+
+    listbox_Users_course=Listbox(users_course_Tk, yscrollcommand = scrollbar_Users_course.set)
+
+    for i in L:
+        listbox_Users_course.insert(END,i)
+
+    listbox_Users_course.grid(row=1)
+
+    scrollbar_Users_course.config(command=listbox_Users_course.yview)
+
+    delete_Users_course=Button(users_course_Tk, text='Delete', width=25,command=Delete_course)
+    delete_Users_course.grid(row=2)
+
+    # information_Users_course=Button(users_course_Tk, text='Information',width=25,command=info_course)
+    # information_Users_course.grid(row=2,column=1)
+
+#............................................................
+
+def Delete_student():
+    global listbox_Users_student, Delete_student_Tk
+
+    student_Delete_student=listbox_Users_student.get(ANCHOR)
+
+    Delete_student_Tk=Tk()
+    Delete_student_Tk.title('Delete')
+    Delete_student_Tk.geometry('200x100')
+
+    Label_frame=Frame(Delete_student_Tk)
+    Label_frame.pack(side=TOP)
+
+    Button_frame=Frame(Delete_student_Tk)
+    Button_frame.pack(side=BOTTOM)
+
+    Label(Label_frame,text='Are you sure to delete : '+'\n'+str(student_Delete_student[0])+'  '+student_Delete_student[1]+
+          ' '+student_Delete_student[2]).grid(row=0)
+
+    yes=Button(Button_frame, text='Yes', command=lambda: Delete_student2(1,student_Delete_student[0],2))
+    yes.grid(row=0)
+
+    cancel=Button(Button_frame, text="Cancel", command=lambda: Delete_student2(0,student_Delete_student[0],mode=2))
+    cancel.grid(row=0, column=1)
+
+def Delete_student2(status,id,mode=1):
+    global Delete_student_Tk, users_student_Tk
+
+    if mode==1:
+
+        if status==1:
+            bl.student.Delete(id)
+            Delete_student_Tk.destroy()
+            messagebox.showinfo("Delete", 'Student Deleted successfully')
+
+        elif status==0:
+            Delete_student_Tk.destroy()
+
+    elif mode==2:
+
+        if status==1:
+            bl.student.Delete(id)
+            users_student_Tk.destroy()
+            Users_student()
+            Delete_student_Tk.destroy()
+
+            messagebox.showinfo("Delete",'Student Deleted successfully')
+
+
+        elif status==0:
+            Delete_student_Tk.destroy()
+
+
+
+
+
+
+#....................
+
+def Info_student():
+    global listbox_Users_student
+
+    info_student_Tk = Tk()
+    info_student_Tk.title('Information')
+    info_student_Tk.geometry('600x250')
+
+    id = listbox_Users_student.get(ANCHOR)
+    id = id[0]
+
+    info = bl.student.info(id)
+    courses=bl.unit_select.course_student(id)
+
+    row1 = Frame(info_student_Tk)
+    row1.place(width=600, height=100)
+
+    row2 = Frame(info_student_Tk)
+    row2.place(width=600, height=100, y=100)
+
+    row3 = Frame(info_student_Tk)
+    row3.place(width=600, height=40, y=200)
+
+    Label(row1, text='ID: ' + str(id), font=('Times 14')).place(x=0)
+    Label(row1, text='Name: ' + info[1], font=('Times 14')).place(x=200)
+    Label(row1, text='Family: ' + info[2], font=('Times 14')).place(x=400)
+
+    Label(row2, text='Average: ' + str(info[3]), font=('Times 14')).place(x=0)
+    Label(row2, text='Password: ' + info[4], font=('Times 14')).place(x=200)
+
+    Label(row3, text='Courses: ', font=('Times 14')).place(x=0)
+    Label(row3, text=courses, font=('Times 14')).place(x=80)
+
+
+
+#.....................................
+
+def Delete_teacher():
+    global listbox_Users_teacher, Delete_teacher_Tk
+
+    teacher_Delete_teacher = listbox_Users_teacher.get(ANCHOR)
+
+    Delete_teacher_Tk = Tk()
+    Delete_teacher_Tk.title('Delete')
+    Delete_teacher_Tk.geometry('200x100')
+
+    Label_frame = Frame(Delete_teacher_Tk)
+    Label_frame.pack(side=TOP)
+
+    Button_frame = Frame(Delete_teacher_Tk)
+    Button_frame.pack(side=BOTTOM)
+
+    Label(Label_frame, text='Are you sure to delete : ' + '\n' + str(teacher_Delete_teacher[0]) + '  ' + teacher_Delete_teacher[1] +
+               ' ' + teacher_Delete_teacher[2]).grid(row=0)
+
+    yes = Button(Button_frame, text='Yes', command=lambda: Delete_teacher2(1, teacher_Delete_teacher[0], 2))
+    yes.grid(row=0)
+
+    cancel = Button(Button_frame, text="Cancel", command=lambda: Delete_teacher2(0, teacher_Delete_teacher[0], mode=2))
+    cancel.grid(row=0, column=1)
+
+
+def Delete_teacher2(status, id, mode=1):
+    global Delete_teacher_Tk, users_teacher_Tk
+
+    if mode == 1:
+
+        if status == 1:
+            bl.teacher.Delete(id)
+            Delete_teacher_Tk.destroy()
+            messagebox.showinfo("Delete", 'Teacher Deleted successfully')
+
+        elif status == 0:
+            Delete_teacher_Tk.destroy()
+
+    elif mode == 2:
+
+        if status == 1:
+            bl.teacher.Delete(id)
+            users_teacher_Tk.destroy()
+            Users_teacher()
+            Delete_teacher_Tk.destroy()
+
+            messagebox.showinfo("Delete", 'Teacher Deleted successfully')
+
+
+        elif status == 0:
+            Delete_teacher_Tk.destroy()
+
+#......................
+
+def info_teacher():
+    global listbox_Users_teacher
+
+    info_teacher_Tk = Tk()
+    info_teacher_Tk.title('Information')
+    info_teacher_Tk.geometry('600x150')
+
+    id = listbox_Users_teacher.get(ANCHOR)
+    id = id[0]
+
+    info = bl.teacher.info(id)
+    course = bl.teacher.select_course(id)
+
+    row1 = Frame(info_teacher_Tk)
+    row1.place(width=600, height=100)
+
+    row2 = Frame(info_teacher_Tk)
+    row2.place(width=600, height=50, y=100)
+
+
+
+    Label(row1, text='ID: ' + str(id), font=('Times 14')).place(x=0)
+    Label(row1, text='Name: ' + info[1], font=('Times 14')).place(x=200)
+    Label(row1, text='Family: ' + info[2], font=('Times 14')).place(x=400)
+
+    Label(row2, text='Course: ' + course, font=('Times 14')).place(x=0)
+    Label(row2, text='Password: ' + info[4], font=('Times 14')).place(x=200)
+
+
+
+#..............................
+
+
+def Delete_admin():
+    global listbox_Users_admin, Delete_admin_Tk
+
+    admin_Delete_admin = listbox_Users_admin.get(ANCHOR)
+
+    Delete_admin_Tk = Tk()
+    Delete_admin_Tk.title('Delete')
+    Delete_admin_Tk.geometry('200x100')
+
+    Label_frame = Frame(Delete_admin_Tk)
+    Label_frame.pack(side=TOP)
+
+    Button_frame = Frame(Delete_admin_Tk)
+    Button_frame.pack(side=BOTTOM)
+
+    Label(Label_frame, text='Are you sure to delete : ' + '\n' + str(admin_Delete_admin[0]) + '  ' + admin_Delete_admin[1] +
+               ' ' + admin_Delete_admin[2]).grid(row=0)
+
+    yes = Button(Button_frame, text='Yes', command=lambda: Delete_admin2(1, admin_Delete_admin[0], 2))
+    yes.grid(row=0)
+
+    cancel = Button(Button_frame, text="Cancel", command=lambda: Delete_admin2(0, admin_Delete_admin[0], mode=2))
+    cancel.grid(row=0, column=1)
+
+
+def Delete_admin2(status, id, mode=1):
+    global Delete_admin_Tk, users_admin_Tk
+
+    if mode == 1:
+
+        if status == 1:
+            bl.admin.Delete(id)
+            Delete_admin_Tk.destroy()
+            messagebox.showinfo("Delete", 'Admin Deleted successfully')
+
+        elif status == 0:
+            Delete_admin_Tk.destroy()
+
+    elif mode == 2:
+
+        if status == 1:
+            bl.admin.Delete(id)
+            users_admin_Tk.destroy()
+            Users_admin()
+            Delete_admin_Tk.destroy()
+
+            messagebox.showinfo("Delete", 'Admin Deleted successfully')
+
+
+        elif status == 0:
+            Delete_admin_Tk.destroy()
+
+#.................
+
+def info_admin():
+    global listbox_Users_admin
+
+    info_admin_Tk = Tk()
+    info_admin_Tk.title('Information')
+    info_admin_Tk.geometry('600x150')
+
+    id = listbox_Users_admin.get(ANCHOR)
+    id = id[0]
+
+    info = bl.admin.info(id)
+
+
+
+    row1 = Frame(info_admin_Tk)
+    row1.place(width=600, height=100)
+
+    row2 = Frame(info_admin_Tk)
+    row2.place(width=600, height=50, y=100)
+
+    Label(row1, text='ID: ' + str(id), font=('Times 14')).place(x=0)
+    Label(row1, text='Name: ' + info[1], font=('Times 14')).place(x=200)
+    Label(row1, text='Family: ' + info[2], font=('Times 14')).place(x=400)
+
+    Label(row2, text='Password: ' + info[3], font=('Times 14')).place(x=0)
+    Label(row2, text='Access: ' + str(info[4]), font=('Times 14')).place(x=200)
+
+
+#.............................
+
+def Delete_course():
+    global listbox_Users_course, Delete_course_Tk
+
+    course_Delete_course=listbox_Users_course.get(ANCHOR)
+
+    Delete_course_Tk=Tk()
+    Delete_course_Tk.title('Delete')
+    Delete_course_Tk.geometry('200x100')
+
+    Label_frame=Frame(Delete_course_Tk)
+    Label_frame.pack(side=TOP)
+
+    Button_frame=Frame(Delete_course_Tk)
+    Button_frame.pack(side=BOTTOM)
+
+    Label(Label_frame,text='Are you sure to delete : '+'\n'+str(course_Delete_course[0])+'  '+course_Delete_course[1]).grid(row=0)
+
+    yes=Button(Button_frame, text='Yes', command=lambda: Delete_course2(1,course_Delete_course[0],2))
+    yes.grid(row=0)
+
+    cancel=Button(Button_frame, text="Cancel", command=lambda: Delete_course2(0,course_Delete_course[0],mode=2))
+    cancel.grid(row=0, column=1)
+
+def Delete_course2(status,id,mode=1):
+    global Delete_course_Tk, users_course_Tk
+
+    if mode == 1:
+
+        if status == 1:
+            bl.course.Delete(id)
+            Delete_course_Tk.destroy()
+            messagebox.showinfo("Delete", 'Course Deleted successfully')
+
+        elif status == 0:
+            Delete_course_Tk.destroy()
+
+    elif mode == 2:
+
+        if status == 1:
+            bl.course.Delete(id)
+            users_course_Tk.destroy()
+            Users_course()
+            Delete_course_Tk.destroy()
+
+            messagebox.showinfo("Delete", 'Course Deleted successfully')
+
+
+        elif status == 0:
+            Delete_course_Tk.destroy()
+
+
+#.................
+
+# def info_course():
+#     pass
 
 # ...........................................................................................
 
@@ -592,8 +1067,11 @@ def Home():
         Change_password_Button_Home.grid(row=1, column=1)
 
         if access<3 :
+            print('ok')
             Add_admin_Button= Button(home, text=" Add Admin", width=25, font=('Times 14'),command=Add_admin)
             Add_admin_Button.grid(row=2, column=1)
+        users=Button(home, text='Users',width=25,font=('Times 14'),command=Users)
+        users.grid(row=1,column=2)
 
 
 
@@ -615,4 +1093,5 @@ login_B.grid(row=2)
 sing_up = Button(main, text='Sing up student', font=('Times 14'), width=25, bg='#ebff0a', command=Add_student)
 sing_up.grid(row=1)
 
+Users()
 mainloop()

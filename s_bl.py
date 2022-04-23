@@ -29,19 +29,25 @@ class student:
 
     @staticmethod
     def All_name():
-        Q='select name,family from student'
+        Q='select id,name,family from student'
         l=dbm.select(Q)
 
-        names=[]
-        for i in l :
-            names.append(i[0]+' '+i[1])
-        return names
+
+        return l
+
+    @staticmethod
+    def info(id):
+        Q='SELECT * FROM student WHERE id={}'.format(id)
+        L=dbm.select(Q)
+        return L[0]
+
 
     @staticmethod
     def search(ids):
         Q='select name,family from student where id={}'.format(ids)
         L=dbm.select(Q)
         return L[0][0],L[0][1]
+
     @staticmethod
     def Get_avg(ids):
         Q='select avg from student where id={}'.format(ids)
@@ -83,6 +89,12 @@ class student:
 
         if password_s==password[0][0]:
             return True
+
+    @staticmethod
+    def Delete(id):
+
+        Q='DELETE FROM student WHERE id={}'.format(id)
+        dbm.update(Q)
 
 
 
@@ -146,6 +158,25 @@ class teacher:
 
         return course[0][0]
 
+    @staticmethod
+    def All_name():
+        Q='select id,name,family from teacher'
+        l=dbm.select(Q)
+
+
+        return l
+
+    @staticmethod
+    def Delete(id):
+
+        Q = 'DELETE FROM teacher WHERE id={}'.format(id)
+        dbm.update(Q)
+
+    @staticmethod
+    def info(idt):
+        Q='SELECT * FROM teacher WHERE id={}'.format(idt)
+        L=dbm.select(Q)
+        return L[0]
 
 
 class admin:
@@ -199,6 +230,26 @@ class admin:
         l=dbm.select(Q)
         return l[0][0]
 
+    @staticmethod
+    def All_name():
+        Q='select id,name,family,access from admin'
+        l=dbm.select(Q)
+
+        return l
+
+
+    @staticmethod
+    def Delete(id):
+
+        Q = 'DELETE FROM admin WHERE id={}'.format(id)
+        dbm.update(Q)
+
+    @staticmethod
+    def info(idt):
+        Q = 'SELECT * FROM admin WHERE id={}'.format(idt)
+        L = dbm.select(Q)
+        return L[0]
+
 
 class course:
     def __init__(self,name):
@@ -226,9 +277,14 @@ class course:
 
     @staticmethod
     def check_id(id):
-        Q = 'Select count(*) from teacher where id={}'.format(id)
+        Q = 'Select count(*) from course where id={}'.format(id)
         l = dbm.select(Q)
         return l[0][0]
+
+    @staticmethod
+    def Delete(id):
+        Q = 'DELETE FROM course WHERE id={}'.format(id)
+        dbm.update(Q)
 
 
 class unit_select:
@@ -307,6 +363,15 @@ class unit_select:
 
         file=open(n,'w')
         file.write(txt)
+
+    @staticmethod
+    def course_student(ids):
+        Q='SELECT name from course WHERE id in (SELECT idc FROM unit_select WHERE ids={})'.format(ids)
+        L=dbm.select(Q)
+
+        if len(L)==0:
+            return " "
+        return L[0]
         
         
 
