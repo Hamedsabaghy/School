@@ -392,8 +392,8 @@ def change_password():
     change_password_Tk.title('Change password')
     change_password_Tk.geometry("400x200")
 
-    new_password_label_change_password = Label(change_password_Tk, text='New password: ').grid(row=0)
-    confirm_password_label_change_password = Label(change_password_Tk, text='Confirm password: ').grid(row=1)
+    Label(change_password_Tk, text='New password: ').grid(row=0)
+    Label(change_password_Tk, text='Confirm password: ').grid(row=1)
 
     new_password_entry_change_password = Entry(change_password_Tk,show='*')
     new_password_entry_change_password.grid(row=0, column=1)
@@ -907,6 +907,60 @@ def Delete_course2(status,id,mode=1):
 # def info_course():
 #     pass
 
+
+#.....................
+
+def Edit_about_school():
+
+    edit_about_school_Tk = Tk()
+    edit_about_school_Tk.title('Edit about school')
+    edit_about_school_Tk.geometry("500x400")
+
+    Label(edit_about_school_Tk, text='Write text for show in the About school').place(x=0)
+
+
+
+    read_text=bl.about_school_file()
+
+
+    scrollbar_edit_about_school=Scrollbar(edit_about_school_Tk,width=60)
+    scrollbar_edit_about_school.place(y=20)
+    text=Text(edit_about_school_Tk,width=60,height=20, yscrollcommand = scrollbar_edit_about_school.set)
+    text.place(y=20)
+    scrollbar_edit_about_school.config(command=text.yview())
+
+    text.insert(END,read_text)
+
+    submit=Button(edit_about_school_Tk, text='Submit',width=25,command=lambda: Edit_about_school2(text,edit_about_school_Tk))
+    submit.place(y=380)
+
+def Edit_about_school2(text,tk):
+    About=text.get("1.0", "end-1c")
+
+    file = open('About school.txt', 'w')
+    file.write(About)
+
+    tk.destroy()
+
+#...................................
+
+def About_school():
+    about_school_Tk = Tk()
+    about_school_Tk.title('About school')
+    about_school_Tk.geometry("492x330")
+
+    read_text=bl.about_school_file()
+
+    scrollbar_about_school = Scrollbar(about_school_Tk, width=60)
+    scrollbar_about_school.place(y=0,x=10)
+    text = Text(about_school_Tk, width=60, height=20, yscrollcommand=scrollbar_about_school.set)
+    text.insert(END, read_text)
+    text.place(y=0,x=3)
+    scrollbar_about_school.config(command=text.yview())
+    text.config(state= DISABLED)
+
+
+
 # ...........................................................................................
 
 
@@ -1069,9 +1123,14 @@ def Home():
         if access<3 :
             print('ok')
             Add_admin_Button= Button(home, text=" Add Admin", width=25, font=('Times 14'),command=Add_admin)
-            Add_admin_Button.grid(row=2, column=1)
-        users=Button(home, text='Users',width=25,font=('Times 14'),command=Users)
-        users.grid(row=1,column=2)
+            Add_admin_Button.grid(row=1, column=2)
+
+        users = Button(home, text='Users',width=25,font=('Times 14'),command=Users)
+        users.grid(row=2,column=1)
+
+        edit_about_school = Button(home, text='Edit about school', width=25, font=('Times 14'), command=Edit_about_school)
+        edit_about_school.grid(row=3,column=1)
+
 
 
 
@@ -1086,12 +1145,12 @@ main.geometry("600x500")
 
 Label(main, text='Welcome to School', fg='#2debb8', font=('Times 14'), width=60, height=15).grid(row=0)
 
-about_school = Button(main, text='About School', font=('Times 14'), width=50, bg='#ffffff')
+about_school = Button(main, text='About School', font=('Times 14'), width=50, bg='#ffffff', command=About_school)
 about_school.grid(row=3)
 login_B = Button(main, text='Login', font=('Times 14'), width=25, bg='#0afffb', command=Login)
 login_B.grid(row=2)
 sing_up = Button(main, text='Sing up student', font=('Times 14'), width=25, bg='#ebff0a', command=Add_student)
 sing_up.grid(row=1)
 
-Users()
+
 mainloop()

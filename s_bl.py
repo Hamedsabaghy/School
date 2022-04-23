@@ -2,6 +2,7 @@ from s_da import *
 import matplotlib.pyplot as plt
 import random
 from datetime import date
+from glob import glob
 
 dbm=dbm()
 
@@ -394,3 +395,15 @@ def change_password(password,role,id):
         return True
     else:
         return False
+
+def about_school_file():
+    gb=glob('About school.txt')
+
+    if len(gb)==0:
+        file = open('About school.txt', 'w')
+        A=' '
+        file.write(A)
+
+    file = open('About school.txt', 'r')
+
+    return file.read()
