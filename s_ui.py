@@ -402,13 +402,12 @@ def Report():
     Label(report, text=best).grid(row=1, column=1)
     Label(report, text=worst).grid(row=2, column=1)
 
-    # get_plot = Button(report, text='Get plot ', width=25, command=Get_plot)
-    # get_plot.grid(row=3)
+    get_plot = Button(report, text='Get plot ', width=25, command=Get_plot)
+    get_plot.grid(row=3)
 
 
 def Get_plot():
-    location = filedialog.askdirectory()
-    bl.student.Get_plot(location)
+    bl.student.Get_plot()
 
 
 # ...........................................................................................
@@ -491,7 +490,7 @@ def Users_student():
     Label(users_student_Tk,text='First select student and click the Buttons',fg="#808080").grid(row=0)
 
 
-    L=bl.student.All_name()
+    L=bl.student.All_student()
 
     scrollbar_Users_student= Scrollbar(users_student_Tk,width=25)
     scrollbar_Users_student.grid(row=1)
@@ -1057,6 +1056,16 @@ def Student_list_teacher2(list):
 
     get_report_cart = Button(info_Student_list_teacher_Tk, text='Get report cart', command=lambda: Get_report_cart(id))
     get_report_cart.place(y=250)
+#..........................
+
+def creator():
+    creator_Tk = Tk()
+    creator_Tk.title('Creator')
+    creator_Tk.geometry("300x200")
+
+    Label(creator_Tk, text='Creator:', font=('Times 14')).place(y=0,x=0)
+    Label(creator_Tk, text='name: H.S', font=('Times 14')).place(y=50,x=0)
+    Label(creator_Tk, text='gmail: sabaghyhamed@gmail.com', font=('Times 14')).place(y=100, x=0)
 
 # ...........................................................................................
 
@@ -1206,7 +1215,7 @@ def Home():
     if role == 'teacher':
         Label(labels, text='Role :  ' + (role) , font=('Times 14')).place(x=0)
         Label(labels, text='ID :  ' + str(main_id) , font=('Times 14')).place(x=250)
-        Label(labels, text='Name :  ' + (main_name) , font=('Times 14')).place(x=500)
+        Label(labels, text='Name :  ' + (main_name) , font=('Times 14')).place(x=400)
 
         course = bl.teacher.select_course(main_id)
         Label(labels, text='course : ' + course, font=('Times 14')).place(x=800)
@@ -1248,6 +1257,8 @@ def Home():
 
 
 
+
+
 # .............................................................
 
 Login()
@@ -1265,6 +1276,8 @@ login_B = Button(main, text='Login', font=('Times 14'), width=25, bg='#0afffb', 
 login_B.grid(row=2)
 sing_up = Button(main, text='Sing up student', font=('Times 14'), width=25, bg='#ebff0a', command=Add_student)
 sing_up.grid(row=1)
+creator=Button(main, text='Creator', font=('Times 14'), width=10, command=creator)
+creator.grid(row=4)
 
 
 mainloop()

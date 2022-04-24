@@ -30,11 +30,13 @@ class student:
 
     @staticmethod
     def All_name():
-        Q='select id,name,family from student'
-        l=dbm.select(Q)
+        Q = 'select name,family from student'
+        l = dbm.select(Q)
 
-
-        return l
+        names = []
+        for i in l:
+            names.append(i[0] + ' ' + i[1])
+        return names
 
     @staticmethod
     def info(id):
@@ -75,13 +77,12 @@ class student:
         return (Total,Best,Worst)
 
     @staticmethod
-    def Get_plot(location):
+    def Get_plot():
         global Marks
 
         names=student.All_name()
         plt.bar(names,Marks)
         plt.show()
-        plt.savefig(location+'plot.png')
 
     @staticmethod
     def check_password(ids,password_s):
@@ -97,7 +98,12 @@ class student:
         Q='DELETE FROM student WHERE id={}'.format(id)
         dbm.update(Q)
 
+    @staticmethod
+    def All_student():
+        Q='select id,name,family from student '
+        L=dbm.select(Q)
 
+        return L
 
 
 
@@ -136,7 +142,6 @@ class teacher:
         if mood ==1:
             Q = 'select name,family from teacher where id={}'.format(idt)
             L = dbm.select(Q)
-            print(L,idt)
             return L[0][0],L[0][1]
 
         elif mood==2:
